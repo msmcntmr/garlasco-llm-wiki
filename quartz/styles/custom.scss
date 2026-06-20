@@ -1,3 +1,704 @@
 @use "./variables.scss" as *;
 
 // put your custom CSS here!
+
+// ============================================================================
+// Warm paper redesign — palette/fonts come from quartz.config.yaml
+// (theme.colors / theme.typography). Everything else — layout, prose, and
+// per-component visuals — lives here so it survives `quartz upgrade` and
+// `quartz plugin update` (this file is unlayered and always wins the
+// cascade over base.scss + vendored plugin CSS, see
+// quartz/plugins/emitters/componentResources.ts).
+//
+// Quartz's theme only has 3 font slots (header/body/code); sidebar/UI chrome
+// below intentionally uses a system sans stack rather than pulling in a 4th
+// webfont, which would require editing Head.tsx.
+// ============================================================================
+
+$uiFont: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", system-ui, sans-serif;
+
+// ----------------------------------------------------------------------------
+// Layout — slightly tighter grid, narrower reading column
+// ----------------------------------------------------------------------------
+
+.page > #quartz-body {
+  column-gap: 2.5rem;
+
+  & .sidebar.left,
+  & .sidebar.right {
+    padding: 2rem 1.5rem 2rem 1.5rem;
+  }
+
+  & .center > article {
+    max-width: 56rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Prose
+// ----------------------------------------------------------------------------
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+
+h2 {
+  font-weight: 600;
+  line-height: 1.18;
+}
+
+.article-title {
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+tbody,
+li,
+p {
+  line-height: 1.7rem;
+}
+
+li::marker {
+  color: var(--secondary);
+}
+
+a.internal {
+  border-radius: 4px;
+}
+
+code {
+  border: 1px solid color-mix(in srgb, var(--darkgray) 14%, transparent);
+  border-radius: 3px;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--secondary) 25%, transparent);
+}
+
+// ----------------------------------------------------------------------------
+// Page title (sidebar logo) / article title / content meta
+// ----------------------------------------------------------------------------
+
+.page-title {
+  // The `fonts` plugin doesn't append a generic fallback for an explicit
+  // `title` font spec (unlike header/body), so add one here.
+  font-family: var(--titleFont), monospace;
+  font-weight: 600;
+  font-size: 1.4rem;
+  letter-spacing: -0.015em;
+
+  // The page-title component renders `pageTitle` (quartz.config.yaml) as a
+  // single plain-text node with no spans, and editing that vendored plugin
+  // directly wouldn't survive `quartz plugin update`. Split it visually
+  // instead: collapse the real text to zero size and rebuild it as two
+  // independently-stylable pseudo-elements.
+  // NOTE: keep these two strings in sync with `pageTitle` in quartz.config.yaml.
+  a {
+    font-size: 0;
+    font-weight: 400;
+    color: var(--dark);
+
+    &::before {
+      content: "garlasco·";
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    &::after {
+      content: "llm-wiki";
+      font-size: 1.4rem;
+      background-color: var(--background-secondary);
+      padding: 0 6px;
+      border-radius: 3px;
+    }
+  }
+}
+
+.content-meta {
+  color: var(--gray);
+  font-family: $uiFont;
+  font-size: 0.86rem;
+}
+
+.breadcrumb-container {
+  font-family: $uiFont;
+  font-size: 0.82rem;
+
+  .breadcrumb-element:last-child a {
+    color: var(--dark);
+  }
+
+  a {
+    font-weight: 400;
+    color: var(--gray);
+    margin-right: 0.5rem;
+
+    &:hover {
+      color: var(--secondary);
+    }
+  }
+
+  p {
+    margin: 0;
+    color: var(--gray);
+    opacity: 0.6;
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Sidebar section labels (Explorer / Graph / TOC / Backlinks headers)
+// ----------------------------------------------------------------------------
+
+button.desktop-explorer h2,
+button.mobile-explorer h2,
+.graph > h3,
+.backlinks > h3,
+button.toc-header h3 {
+  font-family: $uiFont;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+// ----------------------------------------------------------------------------
+// Explorer
+// ----------------------------------------------------------------------------
+
+// Prevent long file/folder names from forcing a horizontal scrollbar:
+// truncate with ellipsis instead of growing the sidebar column.
+.sidebar.left,
+.explorer,
+.explorer-content,
+.explorer-content ul,
+.explorer-content li,
+.folder-container,
+.folder-container div {
+  min-width: 0;
+}
+
+.sidebar.left {
+  overflow-x: hidden;
+}
+
+// ----------------------------------------------------------------------------
+// Mobile header row (hamburger / title / search+icons)
+// ----------------------------------------------------------------------------
+//
+// On mobile, base.scss turns `.sidebar.left` into a single flex row holding
+// the explorer toggle (hamburger, visually reordered first via the
+// `explorer` plugin's `order: -1`), the page title, and the search/darkmode/
+// reader-mode toolbar. Left to its default `flex-wrap: nowrap`, those four
+// controls don't fit a phone-width row — the title wraps mid-word and the
+// toolbar overflows off-screen, which reads as everything being misaligned.
+// Wrapping the row and forcing the toolbar onto its own line gives each
+// row a sane width budget and keeps `align-items: center` meaningful.
+@media all and (max-width: 800px) {
+  .page > #quartz-body .sidebar.left {
+    flex-wrap: wrap;
+    row-gap: 0.6rem;
+  }
+
+  .page > #quartz-body .sidebar.left > .flex-component {
+    flex: 1 0 100%;
+  }
+
+  // Let the search box use the full row instead of capping out at the
+  // desktop sidebar's narrower `max-width`, now that it has the whole
+  // row to itself.
+  .search {
+    max-width: none;
+  }
+}
+
+// The explorer's full-screen mobile menu (`.explorer-content`) is
+// positioned `absolute; top: 0; left: 0` expecting to cover the viewport,
+// but its containing block is `.sidebar.left`, which the explorer plugin
+// itself makes `position: sticky` on mobile. That sticky box is offset
+// from the viewport's top-left corner (it sits below the page padding),
+// so the "full-page" overlay actually renders inset and clipped instead
+// of covering the screen. `position: fixed` anchors it to the viewport
+// directly, sidestepping the sticky ancestor entirely.
+@media all and (max-width: 800px) {
+  .explorer.collapsed {
+    margin-right: 1rem;
+  }
+
+  .explorer button.mobile-explorer {
+    border: 1px solid var(--background-secondary);
+    border-radius: 3px;
+  }
+
+  .explorer .explorer-content {
+    position: fixed;
+    padding: 5rem 2.5rem 2rem;
+  }
+}
+
+// The shared `.overflow` class (also used by TOC/backlinks for their
+// gradient-fade effect) sets overflow-y, which per spec promotes this
+// element's overflow-x from "visible" to "auto" too — pin it back down.
+.explorer-content ul.explorer-ul {
+  overflow-x: hidden;
+}
+
+// Note: no negative-margin "bleed" on hover/active backgrounds here —
+// it previously caused the highlight to get clipped at the explorer's
+// own overflow boundary. Padding alone keeps the box fully contained.
+// display: block (not flex) — these are plain text leaf links with no
+// icon, and text-overflow: ellipsis does not apply inside a flex
+// container (the text becomes an anonymous flex item and is ignored).
+.explorer-content ul li > a {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  border-radius: 2px;
+  padding: 3px 6px;
+  font-weight: 400;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease;
+
+  &:hover {
+    background: var(--lightgray);
+    opacity: 1;
+  }
+
+  &.active {
+    position: relative;
+    color: var(--secondary);
+    font-weight: 400;
+    background: var(--highlight);
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: -0.75rem;
+      top: 0;
+      bottom: 0;
+      width: 2.5px;
+      background: var(--secondary);
+    }
+  }
+}
+
+// Folder labels: keep them in the UI sans stack (not the serif header font)
+// and at normal weight, matching the plain leaf links below them.
+.folder-container div > a {
+  color: var(--dark);
+}
+
+.folder-container div > a,
+.folder-container div > button span {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-family: $uiFont;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.folder-container div > button {
+  min-width: 0;
+  max-width: 100%;
+}
+
+// Remove the nested-list indent guide rule
+.explorer-content .folder-outer > ul {
+  border-left: none;
+}
+
+.folder-container {
+  border-radius: 5px;
+  padding: 1px 6px;
+
+  &:hover {
+    background: var(--lightgray);
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Search
+// ----------------------------------------------------------------------------
+
+.search {
+  width: 100%;
+
+  > .search-container {
+    > .search-space {
+      > .search-layout {
+        .highlight {
+          background: color-mix(in srgb, var(--tertiary) 15%, #fff0);
+          border-radius: 2px;
+          padding: 0px 3px;
+        }
+
+        > .results-container {
+          .result-card {
+            > h3 {
+              font-size: 1rem;
+              font-weight: 400;
+              color: var(--dark);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.search-button {
+  width: 100%;
+  justify-content: flex-start;
+  gap: 9px;
+  padding: 9px 13px;
+  border: 1px solid var(--lightgray);
+  background: var(--light);
+  transition: border-color 0.18s ease;
+
+  &:hover {
+    border-color: var(--gray);
+    background: var(--light);
+  }
+
+  & p {
+    font-family: $uiFont;
+    font-size: 0.9rem;
+    color: var(--gray);
+    margin: 0;
+  }
+
+  &::after {
+    content: "⌘K";
+    margin-left: auto;
+    font-family: var(--codeFont);
+    font-size: 0.7rem;
+    color: var(--gray);
+    border: 1px solid var(--lightgray);
+    border-radius: 5px;
+    padding: 1px 6px;
+  }
+}
+
+.search-bar {
+  font-family: var(--bodyFont);
+  border-radius: 9px;
+}
+
+// The toolbar row (search / darkmode / reader-mode) is built by the generic
+// Flex component, which wraps each child in a plain block div. The search
+// button is itself a block, so its wrapper div's height matches exactly —
+// but the darkmode/reader-mode buttons are inline <button> elements, and
+// the whitespace text nodes Flex leaves around them inflate the wrapper's
+// line-height beyond the button's own height. That extra height then
+// throws off `align-self: center`, leaving those icons a couple pixels
+// higher than the search box. Flexing the wrapper sidesteps the inline
+// whitespace entirely.
+.flex-component > div {
+  display: flex;
+  align-items: center;
+}
+
+// Give the theme/reader-mode toggle buttons the same border + background
+// as the search box so the whole toolbar row reads as one set of controls.
+.darkmode,
+.readermode {
+  width: 32px;
+  border: 1px solid var(--lightgray);
+  border-radius: 4px;
+  background: var(--light);
+  transition: border-color 0.18s ease;
+
+  &:hover {
+    border-color: var(--gray);
+  }
+
+  & svg {
+    width: 16px;
+    height: 16px;
+    fill: var(--color-base-60);
+    stroke: transparent;
+    top: calc(50% - 8px);
+    left: calc(50% - 8px);
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Note properties
+// ----------------------------------------------------------------------------
+
+.note-properties {
+  border-radius: 5px;
+
+  .note-properties-header {
+    background: var(--lightgray);
+    border-radius: 5px 5px 0 0;
+    font-family: $uiFont;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .note-properties-count {
+    font-family: var(--codeFont);
+    font-size: 0.7rem;
+    color: var(--gray);
+    background: var(--light);
+    border: 1px solid var(--lightgray);
+    border-radius: 5px;
+    padding: 1px 8px;
+  }
+
+  .note-properties-key {
+    font-family: $uiFont;
+  }
+
+  // Render tags as wrapping, comma-free pills rather than an inline run
+  .note-properties-tags {
+    flex-wrap: wrap;
+    gap: 6px;
+
+    .note-properties-separator {
+      display: none;
+    }
+  }
+
+  .note-properties-tags .tag-link {
+    padding: 0 6px;
+    white-space: nowrap;
+    border: 1px solid color-mix(in srgb, var(--secondary) 35%, transparent);
+
+    &:hover {
+      background: var(--secondary);
+      color: var(--light);
+    }
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Table of contents
+// ----------------------------------------------------------------------------
+
+ul.toc-content.overflow {
+  border-left: 2px solid var(--lightgray);
+  padding-left: 0.75rem;
+
+  & > li > a {
+    font-family: $uiFont;
+    font-size: 0.875rem;
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.2;
+    padding: 0.25rem 0;
+    transition:
+      transform 0.2s ease,
+      color 0.18s ease,
+      opacity 0.5s ease;
+
+    &:hover {
+      transform: translateX(3px);
+    }
+
+    &.in-view {
+      color: var(--secondary);
+      opacity: 1;
+    }
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Backlinks
+// ----------------------------------------------------------------------------
+
+.backlinks > ul.overflow > li > a {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 11px;
+  border: 1px solid var(--lightgray);
+  font-family: $uiFont;
+  font-size: 0.85rem;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease;
+
+  &::before {
+    content: "";
+    flex: none;
+    width: 14px;
+    height: 14px;
+    opacity: 0.65;
+    background-color: currentColor;
+    mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"></path><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"></path></svg>')
+      center / contain no-repeat;
+    -webkit-mask: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7 0l3-3a5 5 0 0 0-7-7l-1 1"></path><path d="M14 11a5 5 0 0 0-7 0l-3 3a5 5 0 0 0 7 7l1-1"></path></svg>')
+      center / contain no-repeat;
+  }
+
+  &:hover {
+    border-color: var(--secondary);
+    background: var(--highlight);
+
+    &::before {
+      opacity: 0.85;
+    }
+  }
+}
+
+.backlinks > ul.overflow > li:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+// ----------------------------------------------------------------------------
+// Tag pages / folder pages (page-listing, shared by tag-page + folder-page)
+// ----------------------------------------------------------------------------
+
+.page-listing > p {
+  font-family: $uiFont;
+  font-size: 0.85rem;
+  color: var(--gray);
+}
+
+// h2 tag links on the root /tags index
+.popover-hint h2 a.tag-link {
+  font-family: var(--headerFont);
+  color: var(--secondary);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--tertiary);
+  }
+}
+
+ul.section-ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+li.section-li {
+  margin-bottom: 0 !important;
+
+  & > .section {
+    grid-template-columns: fit-content(8em) 1fr !important;
+    grid-template-areas:
+      "meta desc"
+      ".    tags";
+    align-items: baseline;
+    padding: 13px 17px;
+    border: 1px solid var(--lightgray);
+    border-radius: 9px;
+    transition:
+      border-color 0.18s ease,
+      background 0.18s ease;
+
+    &:hover {
+      border-color: var(--secondary);
+      background: var(--highlight);
+    }
+
+    & .meta {
+      grid-area: meta;
+      font-family: $uiFont;
+      font-size: 0.78rem;
+      color: var(--gray);
+    }
+
+    & > .desc {
+      grid-area: desc;
+
+      & > h3 {
+        font-size: 1.05rem;
+
+        & a.internal {
+          color: var(--darkgray);
+          text-decoration: none;
+
+          &:hover {
+            color: var(--secondary);
+          }
+        }
+      }
+    }
+
+    // Plain, comma-free tag list under the description — no pill background
+    & > .tags {
+      grid-area: tags;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px 12px;
+      margin-top: 2px;
+
+      & > li {
+        display: inline-flex;
+      }
+
+      & .tag-link {
+        font-family: $uiFont;
+        font-size: 0.78rem;
+        color: var(--secondary);
+        text-decoration: none;
+        background: none;
+        padding: 0;
+        border-radius: 0;
+        line-height: inherit;
+
+        &::before {
+          content: "#";
+          opacity: 0.6;
+        }
+
+        &:hover {
+          color: var(--tertiary);
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+// ----------------------------------------------------------------------------
+// Graph
+// ----------------------------------------------------------------------------
+
+.graph > .graph-outer {
+  border-radius: 13px;
+  background: var(--lightgray);
+}
+
+// ----------------------------------------------------------------------------
+// Footer / darkmode
+// ----------------------------------------------------------------------------
+
+footer {
+  padding-top: 1.25rem;
+  opacity: 1;
+  font-family: $uiFont;
+  font-size: 0.8rem;
+  color: var(--gray);
+
+  & ul a {
+    color: var(--gray);
+    font-weight: 400;
+
+    &:hover {
+      color: var(--secondary);
+    }
+  }
+}
+
+.darkmode:hover svg {
+  opacity: 0.7;
+}

@@ -11,3 +11,10 @@ private/
 replit.nix
 .quartz/
 quartz/cli/tui/dist/
+
+# Symlink to the external Obsidian vault — never commit (dangles on CI runners,
+# and vault source must stay private; see deploy.yaml for how content is fetched in CI)
+/content
+
+# Local design scratch, not part of the published site
+frontend-mockup/
