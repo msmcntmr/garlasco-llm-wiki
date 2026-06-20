@@ -33,6 +33,10 @@ jobs:
           token: ${{ secrets.VAULT_TOKEN }}
           path: content
 
+      - name: Record vault commit SHA
+        id: vault_sha
+        run: echo "sha=$(git -C content rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -57,10 +61,15 @@ jobs:
       - run: npm ci
 
       - name: Install Quartz plugins
-        run: npx quartz plugin install
+        # --from-config re-resolves the local-plugins/footer path against this
+        # runner's checkout instead of trusting the absolute path baked into
+        # quartz.lock.json by the machine that last ran `plugin add`/`install`.
+        run: npx quartz plugin install --from-config
 
       - name: Build Quartz
         run: npx quartz build
+        env:
+          QUARTZ_VAULT_SHA: ${{ steps.vault_sha.outputs.sha }}
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

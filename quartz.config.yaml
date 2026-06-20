@@ -123,7 +123,9 @@ plugins:
     options:
       title:
         name: IBM Plex Mono
-        weights: [400, 600]
+        weights:
+          - 400
+          - 600
   - source: github:quartz-community/remove-draft
     enabled: true
   - source: github:quartz-community/explicit-publish
@@ -242,10 +244,6 @@ plugins:
     layout:
       position: afterBody
       priority: 10
-  - source: github:quartz-community/footer
-    enabled: true
-    options:
-      links: {}
   - source: github:quartz-community/recent-notes
     enabled: false
   - source: github:quartz-community/spacer
@@ -295,6 +293,13 @@ plugins:
       enableInteraction: true
       darkMode: auto
       exportPadding: 20
+    order: 50
+  # Local fork of github:quartz-community/footer adding a "Last update" line
+  # with the build timestamp and vault commit SHA — see local-plugins/footer/
+  - source: ./local-plugins/footer
+    enabled: true
+    options:
+      links: {}
     order: 50
 layout:
   groups:

@@ -134,10 +134,10 @@
       "installedAt": "2026-06-18T23:07:31.949Z"
     },
     "footer": {
-      "source": "github:quartz-community/footer",
-      "resolved": "https://github.com/quartz-community/footer.git",
-      "commit": "6ed61928d3c0178d7cef972ebcbca6a206a2f065",
-      "installedAt": "2026-06-18T23:07:34.656Z"
+      "source": "./local-plugins/footer",
+      "resolved": "/Users/massimo/garlasco-wiki/quartz/local-plugins/footer",
+      "commit": "local",
+      "installedAt": "2026-06-20T21:17:30.042Z"
     },
     "github-flavored-markdown": {
       "source": "github:quartz-community/github-flavored-markdown",
