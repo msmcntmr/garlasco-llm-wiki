@@ -694,6 +694,22 @@ footer {
     line-height: 1.4;
   }
 
+  .disclaimer {
+    margin-top: 2rem;
+
+    & p {
+      opacity: 0.6;
+      display: block;
+      margin-bottom: 0.4rem;
+      color: var(--text-faint);
+
+      a {
+        font-weight: 400;
+        opacity: 1;
+      }
+    }
+  }
+
   & ul a {
     color: var(--gray);
     font-weight: 400;
