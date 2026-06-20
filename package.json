@@ -1,15 +1,15 @@
 {
-  "name": "@jackyzha0/quartz",
-  "description": "🌱 publish your digital garden and notes as a website",
+  "name": "garlasco-llm-wiki",
+  "description": "Garlasco investigation wiki — a Quartz-powered static site for the Delitto di Garlasco (2007) case research",
   "private": true,
   "version": "5.0.0",
   "type": "module",
-  "author": "jackyzha0 <j.zhao2k19@gmail.com>",
+  "author": "Massimo Centemeri",
   "license": "MIT",
-  "homepage": "https://quartz.jzhao.xyz",
+  "homepage": "https://msmcntmr.github.io/garlasco-llm-wiki",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jackyzha0/quartz.git"
+    "url": "https://github.com/msmcntmr/garlasco-llm-wiki.git"
   },
   "scripts": {
     "quartz": "./quartz/bootstrap-cli.mjs",

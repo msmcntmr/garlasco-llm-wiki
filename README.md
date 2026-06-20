@@ -1,17 +1,13 @@
-# Quartz v5
+# Garlasco Investigation Wiki
 
-> “[One] who works with the door open gets all kinds of interruptions, but [they] also occasionally gets clues as to what the world is and what might be important.” — Richard Hamming
+A static site publishing research on the *Delitto di Garlasco* (2007) case, built with [Quartz](https://quartz.jzhao.xyz/) v5.
 
-Quartz is a set of tools that helps you publish your [digital garden](https://jzhao.xyz/posts/networked-thought) and notes as a website for free.
+🔗 **Live site:** https://msmcntmr.github.io/garlasco-llm-wiki/
 
-🔗 Read the documentation and get started: https://quartz.jzhao.xyz/
+## About
 
-[Join the Discord Community](https://discord.gg/cRFFHYye7t)
+This repo holds the Quartz site generator and the theme/layout customizations for the wiki. The actual case content lives in a private Obsidian vault and is checked out at build time by `.github/workflows/deploy.yaml`, which then builds and deploys the site to GitHub Pages.
 
-## Sponsors
+## Credits
 
-<p align="center">
-  <a href="https://github.com/sponsors/jackyzha0">
-    <img src="https://cdn.jsdelivr.net/gh/jackyzha0/jackyzha0/sponsorkit/sponsors.svg" />
-  </a>
-</p>
+Built on [Quartz](https://github.com/jackyzha0/quartz) by [jackyzha0](https://github.com/jackyzha0), licensed under MIT (see `LICENSE.txt`).
