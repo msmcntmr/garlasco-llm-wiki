@@ -311,7 +311,7 @@ function i18n(locale) {
 }
 
 // src/components/styles/footer.scss
-var footer_default = "footer {\n  text-align: left;\n  margin-bottom: 4rem;\n  opacity: 0.7;\n}\nfooter .lastUpdated {\n  font-size: 0.8rem;\n  margin-top: 0.2rem;\n}\nfooter ul {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n  display: flex;\n  flex-direction: row;\n  gap: 1rem;\n  margin-top: -1rem;\n}";
+var footer_default = "footer {\n  text-align: left;\n  margin-bottom: 4rem;\n  opacity: 0.7;\n}\nfooter .lastUpdated {\n  font-size: 0.8rem;\n  margin-top: 0.2rem;\n}\nfooter .disclaimer {\n  margin-top: 1rem;\n}\nfooter ul {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n  display: flex;\n  flex-direction: row;\n  gap: 1rem;\n  margin-top: -1rem;\n}";
 var l;
 l = { __e: function(n2, l2, u3, t2) {
   for (var i2, r2, o2; l2 = l2.__; ) if ((i2 = l2.__c) && !i2.__) try {
@@ -370,7 +370,22 @@ var Footer_default = ((opts) => {
         buildTimestamp,
         deploySha ? ` \xB7 ${deploySha}` : ""
       ] }),
-      /* @__PURE__ */ u2("ul", { children: Object.entries(links).map(([text, link]) => /* @__PURE__ */ u2("li", { children: /* @__PURE__ */ u2("a", { href: link, children: text }) })) })
+      /* @__PURE__ */ u2("ul", { children: Object.entries(links).map(([text, link]) => /* @__PURE__ */ u2("li", { children: /* @__PURE__ */ u2("a", { href: link, children: text }) })) }),
+      /* @__PURE__ */ u2("div", { class: "disclaimer", children: [
+        /* @__PURE__ */ u2("p", { children: "Le informazioni contenute in questo sito web sono tratte esclusivamente da fonti di pubblico dominio, tra cui articoli giornalistici, atti pubblici, dichiarazioni ufficiali e altri materiali liberamente accessibili online. Il sito \xE8 gestito nell'esercizio del diritto di libera manifestazione del pensiero, garantito dall'art. 21 della Costituzione Italiana, e nel rispetto dei principi del diritto di cronaca come consolidati dalla giurisprudenza della Corte di Cassazione." }),
+        /* @__PURE__ */ u2("p", { children: "Le eventuali analisi, ipotesi interpretative o contenuti elaborati tramite intelligenza artificiale generativa sono chiaramente riconducibili alle rispettive fonti o indicati come tali, e non costituiscono in alcun caso affermazioni di fatto certificate dall'autore del sito. Il materiale \xE8 raccolto e presentato con finalit\xE0 di documentazione, informazione pubblica e analisi critica, senza alcun intento diffamatorio, denigratorio o lesivo dell'onore e della reputazione di alcuna persona fisica o giuridica, ai sensi degli artt. 595 e 596 c.p." }),
+        /* @__PURE__ */ u2("p", { children: "Ai sensi del Regolamento UE 2016/679 (GDPR) e del D.lgs. 196/2003 (Codice della Privacy), i dati personali eventualmente citati sono trattati esclusivamente per finalit\xE0 di interesse pubblico e di cronaca giudiziaria, nel rispetto del principio di essenzialit\xE0 dell'informazione. Il titolare del sito non raccoglie n\xE9 tratta dati personali degli utenti del sito per finalit\xE0 diverse dalla semplice navigazione." }),
+        /* @__PURE__ */ u2("p", { children: "Questo sito non intende in alcun modo ostacolare, interferire o sostituirsi all'attivit\xE0 delle autorit\xE0 giudiziarie competenti. I contenuti pubblicati non rappresentano la posizione ufficiale di alcun organo giudiziario o istituzionale." }),
+        /* @__PURE__ */ u2("p", { children: [
+          "Per richiedere la revisione, la rettifica o la rimozione di informazioni ritenute non veritiere, datate, o derivanti da errori generativi, \xE8 possibile aprire una segnalazione tramite l'apposito sistema di tracciamento all'indirizzo",
+          " ",
+          /* @__PURE__ */ u2("a", { href: "https://github.com/msmcntmr/garlasco-llm-wiki/issues", children: "github.com/msmcntmr/garlasco-llm-wiki/issues" }),
+          ", oppure inviare una comunicazione scritta a:",
+          " ",
+          /* @__PURE__ */ u2("a", { href: "mailto:epitome.beak-1g@icloud.com", children: "epitome.beak-1g@icloud.com" }),
+          ". Le richieste verranno valutate entro un termine ragionevole."
+        ] })
+      ] })
     ] });
   };
   Footer.css = footer_default;
