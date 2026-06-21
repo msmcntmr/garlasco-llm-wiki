@@ -18,15 +18,44 @@
 $uiFont: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", system-ui, sans-serif;
 
 // ----------------------------------------------------------------------------
+// Update banner spacing reservation
+//
+// local-plugins/update-banner/ renders `position: fixed` (escaping its nested
+// beforeBody placement — see that plugin's own scss) so it floats above
+// everything. --banner-height is 0 by default; :has() bumps it to the
+// banner's actual height only when the banner's DOM node is present, so
+// toggling `enabled: false` in quartz.config.yaml removes the reserved space
+// automatically, with no separate flag to keep in sync here.
+// ----------------------------------------------------------------------------
+
+:root {
+  --banner-height: 0px;
+}
+
+body:has(.update-banner) {
+  --banner-height: 2.875rem;
+}
+
+// ----------------------------------------------------------------------------
 // Layout — slightly tighter grid, narrower reading column
 // ----------------------------------------------------------------------------
 
 .page > #quartz-body {
   column-gap: 2.5rem;
+  padding-top: var(--banner-height);
 
   & .sidebar.left,
   & .sidebar.right {
     padding: 2rem 1.5rem 2rem 1.5rem;
+
+    // base.scss only keeps sidebars sticky/100vh on desktop (mobile/tablet
+    // unstick them to flex-row chrome via "position: initial; height: unset"
+    // nested media queries) — gate the offset the same way so we don't fight
+    // that override with an unconditional `height: calc(...)` here.
+    @media all and ($desktop) {
+      top: var(--banner-height);
+      height: calc(100vh - var(--banner-height));
+    }
   }
 
   & .center > article {

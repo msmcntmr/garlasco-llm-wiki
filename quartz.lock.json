@@ -281,6 +281,12 @@
       "resolved": "https://github.com/quartz-community/unlisted-pages.git",
       "commit": "f512d8672862c5891e63d755ba04b66277e6d760",
       "installedAt": "2026-06-18T23:07:32.380Z"
+    },
+    "update-banner": {
+      "source": "./local-plugins/update-banner",
+      "resolved": "/Users/massimo/garlasco-wiki/quartz/local-plugins/update-banner",
+      "commit": "local",
+      "installedAt": "2026-06-21T01:19:11.593Z"
     }
   }
 }
