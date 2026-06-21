@@ -63,6 +63,18 @@ body:has(.update-banner) {
     margin-left: auto;
     margin-right: auto;
   }
+
+  // On mobile the explorer plugin re-enables `position: sticky` on
+  // `.sidebar.left` (base.scss otherwise unsticks it via `position: initial`)
+  // but never sets its own `top`, so it inherits `top: 0` from base.scss's
+  // generic `.sidebar` rule. Once scrolled, that sticks the title/hamburger
+  // row flush to the true viewport top — directly under the fixed banner —
+  // hiding its top few pixels behind it.
+  @media all and (max-width: 800px) {
+    & .sidebar.left:has(.explorer) {
+      top: var(--banner-height);
+    }
+  }
 }
 
 // ----------------------------------------------------------------------------
@@ -267,8 +279,16 @@ button.toc-header h3 {
     border-radius: 3px;
   }
 
+  // Anchored below the banner (not the true viewport top) so its fixed
+  // 5rem top padding — sized to clear the hamburger button when nothing
+  // else occupies the top of the screen — doesn't get eaten by the
+  // banner's reserved height, which would shove the button past that
+  // padding and overlap the first menu item.
   .explorer .explorer-content {
     position: fixed;
+    top: var(--banner-height);
+    height: calc(100dvh - var(--banner-height));
+    max-height: calc(100dvh - var(--banner-height));
     padding: 5rem 2.5rem 2rem;
   }
 }
