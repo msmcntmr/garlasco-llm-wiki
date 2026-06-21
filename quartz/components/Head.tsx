@@ -12,9 +12,14 @@ export default (() => {
     externalResources,
     ctx,
   }: QuartzComponentProps) => {
+    // Distinct from `cfg.pageTitle` ("garlasco·llm-wiki", the stylized header
+    // logo / font-subset string used below) — this is the human-readable
+    // brand shown in the tab title and social cards.
+    const siteName = "Garlasco LLM Wiki"
     const titleSuffix = cfg.pageTitleSuffix ?? ""
-    const title =
+    const perPageTitle =
       (fileData.frontmatter?.title ?? i18n(cfg.locale).propertyDefaults.title) + titleSuffix
+    const title = fileData.slug === "index" ? siteName : `${siteName} — ${perPageTitle}`
     const description =
       fileData.frontmatter?.socialDescription ??
       fileData.frontmatter?.description ??
@@ -26,6 +31,7 @@ export default (() => {
     const path = url.pathname as FullSlug
     const baseDir = fileData.slug === "404" ? path : pathToRoot(fileData.slug!)
     const iconPath = joinSegments(baseDir, "static/icon.png")
+    const appleTouchIconPath = joinSegments(baseDir, "static/apple-touch-icon.png")
 
     // Url of current page
     const socialUrl =
@@ -62,7 +68,7 @@ export default (() => {
         <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossOrigin="anonymous" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <meta name="og:site_name" content={cfg.pageTitle}></meta>
+        <meta property="og:site_name" content={cfg.pageTitle}></meta>
         <meta property="og:title" content={title} />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
@@ -85,6 +91,7 @@ export default (() => {
 
         {cfg.baseUrl && (
           <>
+            <link rel="canonical" href={socialUrl} />
             <meta property="twitter:domain" content={cfg.baseUrl}></meta>
             <meta property="og:url" content={socialUrl}></meta>
             <meta property="twitter:url" content={socialUrl}></meta>
@@ -92,7 +99,9 @@ export default (() => {
         )}
 
         <link rel="icon" href={iconPath} />
+        <link rel="apple-touch-icon" href={appleTouchIconPath} />
         <meta name="description" content={description} />
+        <meta name="robots" content="index, follow" />
         <meta name="generator" content="Quartz" />
 
         {css.map((resource) => CSSResourceToStyleElement(resource, true))}
