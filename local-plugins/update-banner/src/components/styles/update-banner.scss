@@ -12,8 +12,7 @@
   display: flex;
   align-items: stretch;
   overflow: hidden;
-  background: var(--light);
-  border-bottom: 1px solid var(--lightgray);
+  background: var(--background-secondary);
   font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", system-ui, sans-serif;
 }
 
@@ -22,10 +21,10 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: var(--secondary);
-  color: white;
+  background: var(--dark);
+  color: var(--background-primary);
   padding: 0 1rem;
-  font-size: 0.73rem;
+  font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -37,7 +36,7 @@
   height: 0.5rem;
   flex: none;
   border-radius: 50%;
-  background: white;
+  background: var(--background-modifier-border-focus);
   animation: update-banner-blink 1.4s steps(1, end) infinite;
 }
 
@@ -61,7 +60,7 @@
   white-space: nowrap;
   color: var(--dark);
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 400;
   transform: translateY(-50%);
 
   &::before {
