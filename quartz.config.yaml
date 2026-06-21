@@ -168,10 +168,16 @@ plugins:
     enabled: true
   - source: github:quartz-community/tag-page
     enabled: true
-  - source: github:quartz-community/explorer
+  # Forked locally to fix an upstream bug where folderDefaultState was a
+  # no-op (the client-side script always defaulted folders to collapsed),
+  # and to add folderDefaultOpenDepth for per-depth default state.
+  # See local-plugins/explorer/src/components/scripts/explorer.inline.ts
+  - source: ./local-plugins/explorer
     enabled: true
     options:
-      folderDefaultState: open
+      # Top-level folders (categories, wiki) open by default; their
+      # subfolders (e.g. wiki/contradictions) stay collapsed until clicked.
+      folderDefaultOpenDepth: 1
     layout:
       position: left
       priority: 50

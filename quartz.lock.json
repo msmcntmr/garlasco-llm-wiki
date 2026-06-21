@@ -110,10 +110,10 @@
       "installedAt": "2026-06-18T23:07:32.229Z"
     },
     "explorer": {
-      "source": "github:quartz-community/explorer",
-      "resolved": "https://github.com/quartz-community/explorer.git",
-      "commit": "a2dfd1373abe58ace461ebea0b4e94cb287f894e",
-      "installedAt": "2026-06-18T23:07:33.447Z"
+      "source": "./local-plugins/explorer",
+      "resolved": "/Users/massimo/garlasco-wiki/quartz/local-plugins/explorer",
+      "commit": "local",
+      "installedAt": "2026-06-21T22:15:57.945Z"
     },
     "favicon": {
       "source": "github:quartz-community/favicon",
