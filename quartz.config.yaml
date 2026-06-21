@@ -303,13 +303,16 @@ plugins:
     order: 50
   # Toggleable "In aggiornamento" top status bar — see local-plugins/update-banner/
   # To turn it off: set enabled to false. To change the copy: edit options below.
+  # Must stay on afterBody, not beforeBody: that slot is wrapped in
+  # .popover-hint, which the link-hover-preview popover clones into every
+  # preview box (see UpdateBanner.tsx for the full explanation).
   - source: ./local-plugins/update-banner
     enabled: true
     options:
       badge: "In aggiornamento"
       text: "Il sito è in fase di aggiornamento — alcuni contenuti potrebbero cambiare."
     layout:
-      position: beforeBody
+      position: afterBody
       priority: 1
 layout:
   groups:

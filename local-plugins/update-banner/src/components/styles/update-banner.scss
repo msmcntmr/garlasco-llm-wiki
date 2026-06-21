@@ -48,11 +48,13 @@
   min-width: 0;
 }
 
-// `left` (not `transform: translateX`) is the animated property because its
-// percentages resolve against the *containing block* (.update-banner-ticker),
-// not the element's own width — exactly what's needed to start fully off the
-// ticker's right edge and end fully past its left edge, regardless of how
-// wide the message itself is.
+// The sweep itself is driven by update-banner.inline.ts (transform/transition
+// set via JS), not a CSS @keyframes animation — it needs the ticker's and
+// message's actual measured pixel widths to start fully off the right edge
+// and end exactly hidden behind the badge with zero dead time before
+// restarting, which a fixed-percentage keyframe can't express for arbitrary
+// message lengths and viewport widths. `transform: translateY(-50%)` here is
+// just the static fallback shown before that script runs.
 .update-banner-item {
   position: absolute;
   top: 50%;
@@ -61,8 +63,6 @@
   font-size: 0.85rem;
   font-weight: 500;
   transform: translateY(-50%);
-  animation: update-banner-scroll-single 16s linear infinite;
-  will-change: left;
 
   &::before {
     content: "●";
@@ -73,8 +73,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .update-banner-dot,
-  .update-banner-item {
+  .update-banner-dot {
     animation: none;
   }
 }
@@ -87,14 +86,5 @@
   50%,
   100% {
     opacity: 0.28;
-  }
-}
-
-@keyframes update-banner-scroll-single {
-  from {
-    left: 100%;
-  }
-  to {
-    left: -100%;
   }
 }

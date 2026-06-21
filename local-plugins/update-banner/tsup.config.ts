@@ -42,6 +42,22 @@ export default defineConfig({
           const result = sass.compile(args.path);
           return { contents: result.css, loader: "text" };
         });
+
+        build.onLoad({ filter: /\.inline\.ts$/ }, async (args) => {
+          // Strip TypeScript syntax here, at plugin-build time. Quartz's own
+          // site-build step (componentResources.ts joinScripts) re-parses
+          // Component.afterDOMLoaded/.beforeDOMLoaded strings as plain JS
+          // (esbuild transform with no loader override) — type annotations
+          // left in would fail that second pass with a syntax error.
+          const fs = await import("fs");
+          const esbuild = await import("esbuild");
+          const text = await fs.promises.readFile(args.path, "utf8");
+          const result = await esbuild.transform(text, { loader: "ts", target: "es2022" });
+          return {
+            contents: result.code,
+            loader: "text",
+          };
+        });
       },
     },
   ],

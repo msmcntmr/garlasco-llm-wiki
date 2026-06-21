@@ -63,7 +63,7 @@
     "components": {
       "UpdateBanner": {
         "displayName": "Update Banner",
-        "defaultPosition": "beforeBody",
+        "defaultPosition": "afterBody",
         "defaultPriority": 1
       }
     },
