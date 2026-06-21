@@ -78,6 +78,24 @@ body:has(.update-banner) {
 }
 
 // ----------------------------------------------------------------------------
+// Sidebar scrollbars
+//
+// macOS defaults to overlay scrollbars (invisible until scrolling), so the
+// explorer/search/TOC/backlinks/graph panels already look clean there.
+// Windows has no equivalent default and always renders classic always-on
+// scrollbars — hide them explicitly so the sidebars look the same on both.
+// ----------------------------------------------------------------------------
+
+.sidebar,
+.sidebar * {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+// ----------------------------------------------------------------------------
 // Prose
 // ----------------------------------------------------------------------------
 
