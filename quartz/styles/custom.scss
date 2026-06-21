@@ -48,11 +48,11 @@ body:has(.update-banner) {
   & .sidebar.right {
     padding: 2rem 1.5rem 2rem 1.5rem;
 
-    // base.scss only keeps sidebars sticky/100vh on desktop (mobile/tablet
-    // unstick them to flex-row chrome via "position: initial; height: unset"
-    // nested media queries) — gate the offset the same way so we don't fight
-    // that override with an unconditional `height: calc(...)` here.
-    @media all and ($desktop) {
+    // base.scss only unsticks sidebars to flex-row chrome on mobile
+    // ("position: initial; height: unset" in a `$mobile`-gated nested
+    // media query) — tablet keeps the same sticky/100vh column as desktop,
+    // so this offset needs to apply to both, not just `$desktop`.
+    @media all and not ($mobile) {
       top: var(--banner-height);
       height: calc(100vh - var(--banner-height));
     }
