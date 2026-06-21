@@ -17,6 +17,13 @@ const defaultOptions: UpdateBannerOptions = {
   text: "Il sito è in fase di aggiornamento — alcuni contenuti potrebbero cambiare.",
 };
 
+// Repeating the message many times (rather than the minimum 2 copies needed
+// for the seamless-loop trick) guarantees the track is wider than the ticker
+// viewport regardless of message length or screen width — otherwise the
+// track runs out of content before reaching the right edge, leaving a gap of
+// bare background that reads as the scroll "starting from the middle".
+const REPEAT_COUNT = 20;
+
 // Rendered via the `beforeBody` layout slot (see quartz.config.yaml), which
 // nests it inside the center column alongside the sidebars (DefaultFrame.tsx).
 // `position: fixed` (in update-banner.scss) escapes that nesting so it spans
@@ -25,6 +32,15 @@ const defaultOptions: UpdateBannerOptions = {
 // it via a `:has(.update-banner)` selector.
 export default ((opts?: UpdateBannerOptions) => {
   const options = { ...defaultOptions, ...opts };
+
+  // Two identical halves, each repeated REPEAT_COUNT times: translateX(-50%)
+  // then shifts the track by exactly one half's width, so the loop seam is
+  // invisible regardless of REPEAT_COUNT or message length.
+  const messageSet = Array.from({ length: REPEAT_COUNT }, (_, i) => (
+    <span class="update-banner-item" key={i}>
+      {options.text}
+    </span>
+  ));
 
   const UpdateBanner: QuartzComponent = ({ displayClass }: QuartzComponentProps) => {
     return (
@@ -35,8 +51,8 @@ export default ((opts?: UpdateBannerOptions) => {
         </div>
         <div class="update-banner-ticker">
           <div class="update-banner-track">
-            <span class="update-banner-item">{options.text}</span>
-            <span class="update-banner-item">{options.text}</span>
+            {messageSet}
+            {messageSet}
           </div>
         </div>
       </div>

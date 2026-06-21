@@ -54,7 +54,9 @@
   flex: none;
   align-items: center;
   white-space: nowrap;
-  animation: update-banner-scroll 22s linear infinite;
+  // Duration is tuned for REPEAT_COUNT=20 in UpdateBanner.tsx at a comfortable
+  // reading pace — if you change REPEAT_COUNT a lot, revisit this.
+  animation: update-banner-scroll 90s linear infinite;
   will-change: transform;
 }
 
