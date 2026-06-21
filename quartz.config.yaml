@@ -310,7 +310,7 @@ plugins:
     enabled: true
     options:
       badge: "In aggiornamento"
-      text: "Il periodo tra il 2007 e il 2016 è completo — l'ingest del 2017 è tuttora in corso. Le notizie più recenti potrebbero essere del tutto mancanti."
+      text: "Il periodo tra il 2007 e il 2016 è completo — l'ingest del 2017 è tuttora in corso. Le informazioni più recenti potrebbero essere del tutto mancanti."
     layout:
       position: afterBody
       priority: 1

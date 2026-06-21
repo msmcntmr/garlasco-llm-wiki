@@ -12,7 +12,8 @@
   display: flex;
   align-items: stretch;
   overflow: hidden;
-  background: var(--background-secondary);
+  background: var(--background-primary);
+  border-bottom: 1px solid var(--background-secondary);
   font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", system-ui, sans-serif;
 }
 
@@ -21,14 +22,15 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: var(--dark);
-  color: var(--background-primary);
+  background: var(--background-primary);
+  color: var(--background-modifier-border-focus);
   padding: 0 1rem;
   font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   white-space: nowrap;
+  border-right: 1px solid var(--background-secondary);
 }
 
 .update-banner-dot {
