@@ -43,42 +43,38 @@
 
 .update-banner-ticker {
   flex: 1;
+  position: relative;
   overflow: hidden;
-  display: flex;
-  align-items: center;
   min-width: 0;
 }
 
-.update-banner-track {
-  display: flex;
-  flex: none;
-  align-items: center;
-  white-space: nowrap;
-  // Duration is tuned for REPEAT_COUNT=20 in UpdateBanner.tsx at a comfortable
-  // reading pace — if you change REPEAT_COUNT a lot, revisit this.
-  animation: update-banner-scroll 90s linear infinite;
-  will-change: transform;
-}
-
+// `left` (not `transform: translateX`) is the animated property because its
+// percentages resolve against the *containing block* (.update-banner-ticker),
+// not the element's own width — exactly what's needed to start fully off the
+// ticker's right edge and end fully past its left edge, regardless of how
+// wide the message itself is.
 .update-banner-item {
-  display: inline-flex;
-  align-items: center;
+  position: absolute;
+  top: 50%;
+  white-space: nowrap;
   color: var(--dark);
   font-size: 0.85rem;
   font-weight: 500;
-  padding: 0 1.5rem;
+  transform: translateY(-50%);
+  animation: update-banner-scroll-single 16s linear infinite;
+  will-change: left;
 
   &::before {
     content: "●";
     color: var(--secondary);
-    margin-right: 1.5rem;
+    margin-right: 0.6rem;
     font-size: 0.55rem;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .update-banner-dot,
-  .update-banner-track {
+  .update-banner-item {
     animation: none;
   }
 }
@@ -94,11 +90,11 @@
   }
 }
 
-@keyframes update-banner-scroll {
+@keyframes update-banner-scroll-single {
   from {
-    transform: translateX(0);
+    left: 100%;
   }
   to {
-    transform: translateX(-50%);
+    left: -100%;
   }
 }

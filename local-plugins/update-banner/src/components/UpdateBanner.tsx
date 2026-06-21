@@ -17,13 +17,6 @@ const defaultOptions: UpdateBannerOptions = {
   text: "Il sito è in fase di aggiornamento — alcuni contenuti potrebbero cambiare.",
 };
 
-// Repeating the message many times (rather than the minimum 2 copies needed
-// for the seamless-loop trick) guarantees the track is wider than the ticker
-// viewport regardless of message length or screen width — otherwise the
-// track runs out of content before reaching the right edge, leaving a gap of
-// bare background that reads as the scroll "starting from the middle".
-const REPEAT_COUNT = 20;
-
 // Rendered via the `beforeBody` layout slot (see quartz.config.yaml), which
 // nests it inside the center column alongside the sidebars (DefaultFrame.tsx).
 // `position: fixed` (in update-banner.scss) escapes that nesting so it spans
@@ -33,15 +26,6 @@ const REPEAT_COUNT = 20;
 export default ((opts?: UpdateBannerOptions) => {
   const options = { ...defaultOptions, ...opts };
 
-  // Two identical halves, each repeated REPEAT_COUNT times: translateX(-50%)
-  // then shifts the track by exactly one half's width, so the loop seam is
-  // invisible regardless of REPEAT_COUNT or message length.
-  const messageSet = Array.from({ length: REPEAT_COUNT }, (_, i) => (
-    <span class="update-banner-item" key={i}>
-      {options.text}
-    </span>
-  ));
-
   const UpdateBanner: QuartzComponent = ({ displayClass }: QuartzComponentProps) => {
     return (
       <div class={`update-banner ${displayClass ?? ""}`}>
@@ -49,11 +33,12 @@ export default ((opts?: UpdateBannerOptions) => {
           <span class="update-banner-dot" />
           {options.badge}
         </div>
+        {/* .update-banner-ticker clips and anchors the `left` keyframe
+            (see update-banner.scss): a single copy of the message sweeps
+            in from the ticker's right edge to its left edge, then repeats —
+            a sign drifting past, not a continuous news ticker. */}
         <div class="update-banner-ticker">
-          <div class="update-banner-track">
-            {messageSet}
-            {messageSet}
-          </div>
+          <span class="update-banner-item">{options.text}</span>
         </div>
       </div>
     );
