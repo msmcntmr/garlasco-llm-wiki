@@ -22,6 +22,9 @@ configuration:
     - workflow-audit.md
     - workflow-ingest.md
     - workflow-query.md
+    - scripts
+    - log.md
+    - log
   theme:
     fontOrigin: googleFonts
     cdnCaching: true
