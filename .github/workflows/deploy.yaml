@@ -24,10 +24,10 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout Quartz
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Checkout vault content (private)
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: msmcntmr/garlasco-obsidian-vault
           token: ${{ secrets.VAULT_TOKEN }}
@@ -38,12 +38,12 @@ jobs:
         run: echo "sha=$(git -C content rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 22
 
       - name: Cache dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -51,7 +51,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Cache Quartz plugins
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: .quartz/plugins
           key: ${{ runner.os }}-plugins-${{ hashFiles('quartz.lock.json') }}
@@ -72,10 +72,10 @@ jobs:
           QUARTZ_VAULT_SHA: ${{ steps.vault_sha.outputs.sha }}
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: public
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
