@@ -282,7 +282,7 @@ plugins:
         - last_updated_note
         - description
         - aliases
-      excludedProperties: []
+      excludedProperties: [sources]
       hidePropertiesView: false
       delimiters: ---
       language: yaml
