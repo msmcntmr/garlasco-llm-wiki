@@ -19,12 +19,17 @@ configuration:
     - .gitignore
     - AGENTS.md
     - LLM Investigation Wiki.md
-    - workflow-audit.md
-    - workflow-ingest.md
-    - workflow-query.md
+    - workflow-*.md
     - scripts
     - log.md
     - log
+    - claims
+    - legacy
+    - entities.json
+    - vault.db
+    - .github
+    - .serena
+    - wiki/reports/claims-conflict-candidates.md
   theme:
     fontOrigin: googleFonts
     cdnCaching: true
