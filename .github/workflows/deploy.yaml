@@ -71,6 +71,19 @@ jobs:
         env:
           QUARTZ_VAULT_SHA: ${{ steps.vault_sha.outputs.sha }}
 
+      - name: Delete stale Pages artifact from prior attempts
+        if: github.run_attempt != '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api --paginate \
+            repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts \
+            --jq '.artifacts[] | select(.name == "github-pages") | .id' \
+            | while read -r id; do
+                gh api -X DELETE \
+                  repos/${{ github.repository }}/actions/artifacts/"$id" || true
+              done
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
