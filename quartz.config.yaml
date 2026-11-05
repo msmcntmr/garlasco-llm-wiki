@@ -29,6 +29,7 @@ configuration:
     - vault.db
     - .github
     - .serena
+    - crawler
     - wiki/reports/claims-conflict-candidates.md
   theme:
     fontOrigin: googleFonts
