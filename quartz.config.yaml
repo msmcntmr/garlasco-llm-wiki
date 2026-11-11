@@ -324,7 +324,7 @@ plugins:
   # .popover-hint, which the link-hover-preview popover clones into every
   # preview box (see UpdateBanner.tsx for the full explanation).
   - source: ./local-plugins/update-banner
-    enabled: true
+    enabled: false
     options:
       badge: "In aggiornamento"
       text: "Stiamo attualmente processando gli articoli de La Provincia Pavese del 2025. Le informazioni più recenti potrebbero essere del tutto mancanti."
