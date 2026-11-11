@@ -12,6 +12,50 @@ footer {
     margin-top: 1rem;
   }
 
+  // Donation box, right above "Created with". Selectors are prefixed with
+  // `footer` so they beat the generic `footer p` rules in quartz/styles/custom.scss.
+  & .support-box {
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0 0 1.75rem;
+    color: var(--darkgray);
+  }
+
+  & .support-box-heading {
+    margin: 0 0 0.4rem;
+    font-size: 0.9rem;
+    line-height: 1.25;
+    color: var(--dark);
+  }
+
+  & .support-box p.support-box-text {
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: var(--darkgray);
+  }
+
+  // The vertical gap sits on the button, not on the paragraph: the theme's
+  // `footer p { margin: 0 }` (custom.scss) wins over any margin set on the
+  // paragraph here, regardless of selector specificity.
+  & a.support-box-btn {
+    display: inline-block;
+    margin-top: 1rem;
+    word-spacing: 0.06em;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    background: var(--secondary);
+    color: var(--light);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: var(--tertiary);
+      color: var(--light);
+    }
+  }
+
   & ul {
     list-style: none;
     margin: 0;

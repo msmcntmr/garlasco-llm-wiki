@@ -311,8 +311,11 @@ function i18n(locale) {
 }
 
 // src/components/styles/footer.scss
-var footer_default = "footer {\n  text-align: left;\n  margin-bottom: 4rem;\n  opacity: 0.7;\n}\nfooter .lastUpdated {\n  font-size: 0.8rem;\n  margin-top: 0.2rem;\n}\nfooter .disclaimer {\n  margin-top: 1rem;\n}\nfooter ul {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n  display: flex;\n  flex-direction: row;\n  gap: 1rem;\n  margin-top: -1rem;\n}";
+var footer_default = "footer {\n  text-align: left;\n  margin-bottom: 4rem;\n  opacity: 0.7;\n}\nfooter .lastUpdated {\n  font-size: 0.8rem;\n  margin-top: 0.2rem;\n}\nfooter .disclaimer {\n  margin-top: 1rem;\n}\nfooter .support-box {\n  box-sizing: border-box;\n  width: 100%;\n  margin: 0 0 1.75rem;\n  color: var(--darkgray);\n}\nfooter .support-box-heading {\n  margin: 0 0 0.4rem;\n  font-size: 0.9rem;\n  line-height: 1.25;\n  color: var(--dark);\n}\nfooter .support-box p.support-box-text {\n  font-size: 0.8rem;\n  line-height: 1.5;\n  color: var(--darkgray);\n}\nfooter a.support-box-btn {\n  display: inline-block;\n  margin-top: 1rem;\n  word-spacing: 0.06em;\n  padding: 0.5rem 1rem;\n  border-radius: 4px;\n  background: var(--secondary);\n  color: var(--light);\n  font-size: 0.95rem;\n  font-weight: 600;\n  text-decoration: none;\n  transition: background 0.15s ease;\n}\nfooter a.support-box-btn:hover {\n  background: var(--tertiary);\n  color: var(--light);\n}\nfooter ul {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n  display: flex;\n  flex-direction: row;\n  gap: 1rem;\n  margin-top: -1rem;\n}";
 var l;
+function S(n2) {
+  return n2.children;
+}
 l = { __e: function(n2, l2, u3, t2) {
   for (var i2, r2, o2; l2 = l2.__; ) if ((i2 = l2.__c) && !i2.__) try {
     if ((r2 = i2.constructor) && null != r2.getDerivedStateFromError && (i2.setState(r2.getDerivedStateFromError(n2)), o2 = i2.__d), null != i2.componentDidCatch && (i2.componentDidCatch(n2, t2 || {}), o2 = i2.__d), o2) return i2.__E = i2;
@@ -346,7 +349,14 @@ function formatBuildTimestamp(date) {
   const iso = date.toISOString();
   return `${iso.slice(0, 10)} ${iso.slice(11, 16)} UTC`;
 }
+var defaultSupport = {
+  heading: "Vuoi supportare questo progetto?",
+  text: "L'accesso alla wiki sar\xE0 sempre gratuito, ma mantenerla aggiornata costa tempo e denaro.\nSe ti \xE8 utile, puoi contribuire anche con l'importo di un caff\xE8.",
+  buttonLabel: "\u2615 Offrimi un caff\xE8",
+  url: ""
+};
 var Footer_default = ((opts) => {
+  const support = { ...defaultSupport, ...opts?.support };
   const version = getQuartzVersion();
   const buildTimestamp = formatBuildTimestamp(/* @__PURE__ */ new Date());
   const deploySha = process.env.QUARTZ_VAULT_SHA;
@@ -354,6 +364,23 @@ var Footer_default = ((opts) => {
     const year = (/* @__PURE__ */ new Date()).getFullYear();
     const links = opts?.links ?? [];
     return /* @__PURE__ */ u2("footer", { class: `${displayClass ?? ""}`, children: [
+      support.url && /* @__PURE__ */ u2("div", { class: "support-box", children: [
+        /* @__PURE__ */ u2("h3", { class: "support-box-heading", children: support.heading }),
+        /* @__PURE__ */ u2("p", { class: "support-box-text", children: support.text.split("\n").map((line, i2) => /* @__PURE__ */ u2(S, { children: [
+          i2 > 0 && /* @__PURE__ */ u2("br", {}),
+          line
+        ] })) }),
+        /* @__PURE__ */ u2(
+          "a",
+          {
+            class: "support-box-btn",
+            href: support.url,
+            target: "_blank",
+            rel: "noopener noreferrer",
+            children: support.buttonLabel
+          }
+        )
+      ] }),
       /* @__PURE__ */ u2("p", { children: [
         i18n(cfg?.locale ?? "en-US").components.footer.createdWith,
         " ",

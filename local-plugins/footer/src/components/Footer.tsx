@@ -24,11 +24,29 @@ function formatBuildTimestamp(date: Date): string {
   return `${iso.slice(0, 10)} ${iso.slice(11, 16)} UTC`;
 }
 
-export interface FooterOptions {
-  links: Record<string, string>;
+export interface SupportOptions {
+  heading: string;
+  text: string;
+  buttonLabel: string;
+  /** Donation page (Ko-fi). Empty = the support box is not rendered. */
+  url: string;
 }
 
+export interface FooterOptions {
+  links: Record<string, string>;
+  /** Donation box shown right above "Created with". */
+  support?: Partial<SupportOptions>;
+}
+
+const defaultSupport: SupportOptions = {
+  heading: "Vuoi supportare questo progetto?",
+  text: "L'accesso alla wiki sarà sempre gratuito, ma mantenerla aggiornata costa tempo e denaro.\nSe ti è utile, puoi contribuire anche con l'importo di un caffè.",
+  buttonLabel: "☕ Offrimi un caffè",
+  url: "",
+};
+
 export default ((opts?: FooterOptions) => {
+  const support = { ...defaultSupport, ...opts?.support };
   const version = getQuartzVersion();
   const buildTimestamp = formatBuildTimestamp(new Date());
   const deploySha = process.env.QUARTZ_VAULT_SHA;
@@ -38,6 +56,28 @@ export default ((opts?: FooterOptions) => {
     const links = opts?.links ?? [];
     return (
       <footer class={`${displayClass ?? ""}`}>
+        {support.url && (
+          <div class="support-box">
+            <h3 class="support-box-heading">{support.heading}</h3>
+            <p class="support-box-text">
+              {/* "\n" in the text becomes a line break */}
+              {support.text.split("\n").map((line, i) => (
+                <>
+                  {i > 0 && <br />}
+                  {line}
+                </>
+              ))}
+            </p>
+            <a
+              class="support-box-btn"
+              href={support.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {support.buttonLabel}
+            </a>
+          </div>
+        )}
         <p>
           {i18n(cfg?.locale ?? "en-US").components.footer.createdWith}{" "}
           <a href="https://quartz.jzhao.xyz/">Quartz{version ? ` v${version}` : ""}</a> &copy;{" "}

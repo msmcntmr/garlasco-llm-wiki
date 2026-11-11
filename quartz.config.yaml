@@ -317,6 +317,11 @@ plugins:
     enabled: true
     options:
       links: {}
+      # "Vuoi supportare questo progetto?" donation box, rendered right above
+      # "Created with". Empty url = box hidden. Text/heading/buttonLabel are
+      # also overridable here (defaults live in Footer.tsx).
+      support:
+        url: "https://ko-fi.com/garlascowiki"
     order: 50
   # Toggleable "In aggiornamento" top status bar — see local-plugins/update-banner/
   # To turn it off: set enabled to false. To change the copy: edit options below.
